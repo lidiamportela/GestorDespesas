@@ -88,11 +88,6 @@ formLogin.addEventListener('submit', function (event) {
 
     const nome = inputNome.value.trim();
 
-    if (nome === '') {
-        mostrarMensagem('Introduz o teu nome.', 'erro');
-        return;
-    }
-
     localStorage.setItem('utilizador', nome);
 
     formLogin.reset();
