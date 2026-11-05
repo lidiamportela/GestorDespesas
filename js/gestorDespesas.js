@@ -6,9 +6,7 @@ let editarId = null;
 let temporizadorMensagem = null;
 let meuGrafico = null;
 
-// utilizadores q podem entrar na app
-const utilizadoresPermitidos = ['Lídia', 'Sara'];
-
+// Normalizar o nome do user
 function normalizarNome(nome) {
     return nome.trim().normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
@@ -30,7 +28,7 @@ const cores = [
     '#A8D58B',
     '#83A9D9'
 ];
-
+git add .
 
 const secLogin = document.getElementById('login');
 const secApp = document.getElementById('app');
@@ -88,18 +86,14 @@ function mostrarMensagem(texto, tipo) {
 formLogin.addEventListener('submit', function (event) {
     event.preventDefault();
 
-    const nomeEscrito = inputNome.value.trim();
+    const nome = inputNome.value.trim();
 
-    const utilizador = utilizadoresPermitidos.find(function (nome) {
-        return normalizarNome(nome) === normalizarNome(nomeEscrito);
-    });
-
-    if (utilizador === undefined) {
-        mostrarMensagem('Utilizador não autorizado. Escolhe Lídia ou Sara.', 'erro');
+    if (nome === '') {
+        mostrarMensagem('Introduz o teu nome.', 'erro');
         return;
     }
 
-    localStorage.setItem('utilizador', utilizador);
+    localStorage.setItem('utilizador', nome);
 
     formLogin.reset();
     mostrarApp();
