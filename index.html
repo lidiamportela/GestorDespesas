@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Despesas Pessoais</title>
+
+    <link rel="stylesheet" href="css/despesas.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/gestorDespesas.js" defer></script>
+</head>
+
+<body>
+
+    <!-- login -->
+    <section id="login">
+        <h1>Gestor de Despesas</h1>
+
+        <form id="form-login">
+            <input type="text" id="nome" placeholder="O teu nome" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </section>
+
+
+    <!-- app -->
+    <section id="app" class="escondido">
+        <header>
+            <h1 id="ola"></h1>
+
+            <div>
+                <button id="btn-tema">🌙 Modo noturno</button>
+                <button id="btn-sair">Sair</button>
+            </div>
+        </header>
+
+        <div class="info">
+            <p id="data-hora"></p>
+            <p id="tempo">A carregar o tempo...</p>
+        </div>
+
+
+        <!-- formulário das despesas -->
+        <form id="form-despesa">
+            <input type="text" id="descricao" placeholder="Descrição" required>
+
+            <input type="number" id="valor" placeholder="Valor (€)" step="0.01" min="0" required>
+
+            <select id="categoria">
+                <option value="Alimentação">Alimentação</option>
+                <option value="Casa">Casa</option>
+                <option value="Transportes">Transportes</option>
+                <option value="Lazer">Lazer</option>
+                <option value="Outros">Outros</option>
+            </select>
+
+            <button type="submit" id="btn-guardar">Adicionar</button>
+        </form>
+
+        <!-- mensagem c/ feedback -->
+        <p id="mensagem" class="mensagem"></p>
+
+        <!-- filtro -->
+        <div class="filtro">
+            <label for="filtro">Filtrar por categoria:</label>
+
+            <select id="filtro">
+                <option value="todas">Todas</option>
+                <option value="Alimentação">Alimentação</option>
+                <option value="Casa">Casa</option>
+                <option value="Transportes">Transportes</option>
+                <option value="Lazer">Lazer</option>
+                <option value="Outros">Outros</option>
+            </select>
+        </div>
+
+        <h2>Total gasto: <span id="total">0.00</span> €</h2>
+
+        <!-- lista de despesas -->
+        <ul id="lista"></ul>
+
+        <!-- gráfico -->
+        <div class="grafico-conteudo">
+            <div id="legendaGrafico"></div>
+
+            <div class="grafico-canvas">
+                <canvas id="graficoDespesas"></canvas>
+
+                <div class="grafico-centro">
+                    <span>TOTAL</span>
+                    <strong id="totalGrafico">0,00 €</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- exportar csv -->
+        <button id="btn-exportar">📥 Exportar despesas</button>
+
+    </section>
+
+</body>
+
+</html>

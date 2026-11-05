@@ -1,0 +1,426 @@
+:root {
+    --fundo: #dee3f8;
+    --texto: #252638;
+    --texto2: #f2f3f7;
+    --cartao: #f6f4f7;
+    --borda: #e1e3ed;
+    --destaque: #6558d3;
+    --destaque-hover: #5145b5;
+    --sombra: 0 4px 15px rgba(35, 35, 65, 0.07);
+    --grafico-label: #92909e;
+    --grafico-valor: #353044;
+    --itens-legenda: rgb(61, 60, 59);
+}
+
+body.noturno {
+    --fundo: #20212b;
+    --texto: #f4f3fa;
+    --texto2: #0c011f;
+    --cartao: #2d2e3b;
+    --borda: #454656;
+    --destaque: #a69bf5;
+    --destaque-hover: #8f82e8;
+    --sombra: 0 4px 15px rgba(0, 0, 0, 0.15);
+    --grafico-label: #b8afd5;
+    --grafico-valor: #e7e4f0;
+    --itens-legenda: rgb(206, 203, 200);
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: clamp(16px, 4vw, 40px);
+    font-family: Arial, sans-serif;
+    background-color: var(--fundo);
+    color: var(--texto);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.escondido {
+    display: none;
+}
+
+#app {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: clamp(24px, 3vw, 30px);
+}
+
+h2 {
+    font-size: 22px;
+    margin-top: 28px;
+}
+
+
+/***** login *****/
+
+#login {
+    width: 100%;
+    max-width: 420px;
+    margin: 8vh auto;
+    padding: 25px;
+    background-color: var(--cartao);
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    box-shadow: var(--sombra);
+}
+
+#form-login {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#form-login input {
+    flex: 1 1 180px;
+    min-width: 0;
+}
+
+
+/***** cabeçalho *****/
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+header div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+
+/***** data e meteo *****/
+
+.info {
+    font-size: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 25px;
+    padding: 15px 20px;
+    background-color: var(--cartao);
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: var(--sombra);
+}
+
+.info p {
+    margin: 5px 0;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+
+/***** formulário de despesas *****/
+
+#form-despesa {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+input,
+select,
+button {
+    max-width: 100%;
+    min-width: 0;
+    padding: 11px 13px;
+    border: 1px solid var(--borda);
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+#app input,
+#app select {
+    background-color: var(--cartao);
+    color: var(--texto);
+}
+
+input:focus,
+select:focus {
+    outline: 2px solid var(--destaque);
+    outline-offset: 1px;
+}
+
+button {
+    background-color: var(--destaque);
+    color: var(--texto2);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+    background-color: var(--destaque-hover);
+    transform: translateY(-1px);
+}
+
+#btn-sair {
+    background-color: #777987;
+}
+
+
+/***** mensagens de feedback *****/
+
+.mensagem {
+    min-height: 1.3em;
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.mensagem.sucesso {
+    color: #2e8b3d;
+}
+
+.mensagem.erro {
+    color: #c0392b;
+}
+
+
+/***** filtro + total *****/
+
+.filtro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 22px 0;
+}
+
+#total {
+    color: var(--destaque);
+}
+
+
+/***** lista de despesas *****/
+
+#lista {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+#lista li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 12px;
+    background-color: var(--cartao);
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    box-shadow: var(--sombra);
+    overflow-wrap: anywhere;
+}
+
+#lista li div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+
+/***** gráfico *****/
+
+.grafico-conteudo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 220px);
+    align-items: center;
+    gap: 20px;
+    padding: clamp(15px, 3vw, 25px);
+    background-color: var(--cartao);
+    border-radius: 15px;
+}
+
+#legendaGrafico {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+}
+
+.item-legenda {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    min-width: 0;
+    color: var(--itens-legenda);
+    font-size: 14px;
+}
+
+.cor-legenda {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    border-radius: 50%;
+}
+
+.item-legenda span:last-child {
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.grafico-canvas {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    min-width: 0;
+}
+
+.grafico-canvas canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.grafico-centro {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    text-align: center;
+}
+
+.grafico-centro span {
+    color: var(--grafico-label);
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.grafico-centro strong {
+    color: var(--grafico-valor);
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+
+/***** exportar *****/
+
+#btn-exportar {
+    margin-top: 20px;
+}
+
+
+
+
+@media (max-width: 800px) {
+
+    #form-despesa {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #btn-guardar {
+        width: 100%;
+    }
+
+    .grafico-conteudo {
+        grid-template-columns: minmax(0, 1fr) minmax(170px, 200px);
+        gap: 12px;
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    body {
+        padding: 16px;
+    }
+
+    header {
+        align-items: flex-start;
+    }
+
+    header div {
+        width: 100%;
+    }
+
+    .info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    #form-despesa {
+        grid-template-columns: 1fr;
+    }
+
+    #form-despesa input,
+    #form-despesa select,
+    #form-despesa button {
+        width: 100%;
+    }
+
+    #form-login input,
+    #form-login button {
+        width: 100%;
+    }
+
+    .filtro {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .filtro select {
+        width: 100%;
+    }
+
+    #lista li {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #lista li div {
+        width: 100%;
+    }
+
+    #lista li button {
+        flex: 1;
+    }
+
+    .grafico-conteudo {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 25px;
+        padding: 18px;
+    }
+
+    #legendaGrafico {
+        gap: 14px;
+    }
+
+    .grafico-canvas {
+        width: 100%;
+        max-width: 220px;
+        height: 210px;
+        margin: auto;
+    }
+
+    #btn-exportar {
+        width: 100%;
+    }
+}
