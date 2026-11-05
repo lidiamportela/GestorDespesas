@@ -1,14 +1,19 @@
 let despesas = [];
-
-try {
-    despesas = JSON.parse(localStorage.getItem('despesas')) || [];
-} catch (erro) {
-    console.log('Dados inválidos no localStorage:', erro);
-}
+let chaveDespesas = null;
+let chaveTema = null;
 
 let editarId = null;
 let temporizadorMensagem = null;
 let meuGrafico = null;
+
+// utilizadores q podem entrar na app
+const utilizadoresPermitidos = ['Lídia', 'Sara'];
+
+function normalizarNome(nome) {
+    return nome.trim().normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+}
 
 const categorias = [
     'Alimentação',
@@ -54,7 +59,7 @@ const totalGrafico = document.getElementById('totalGrafico');
 const btnExportar = document.getElementById('btn-exportar');
 
 
-/***** soma dos valores *****/
+/***** Soma dos valores *****/
 
 function somar(listaDespesas) {
     return listaDespesas.reduce(function (soma, d) {
@@ -67,7 +72,7 @@ function somar(listaDespesas) {
 
 function mostrarMensagem(texto, tipo) {
     pMensagem.textContent = texto;
-    pMensagem.className = 'mensagem ' + tipo;   
+    pMensagem.className = 'mensagem ' + tipo;
 
     clearTimeout(temporizadorMensagem);
 
@@ -83,18 +88,53 @@ function mostrarMensagem(texto, tipo) {
 formLogin.addEventListener('submit', function (event) {
     event.preventDefault();
 
-    localStorage.setItem('utilizador', inputNome.value.trim());
+    const nomeEscrito = inputNome.value.trim();
+
+    const utilizador = utilizadoresPermitidos.find(function (nome) {
+        return normalizarNome(nome) === normalizarNome(nomeEscrito);
+    });
+
+    if (utilizador === undefined) {
+        mostrarMensagem('Utilizador não autorizado. Escolhe Lídia ou Sara.', 'erro');
+        return;
+    }
+
+    localStorage.setItem('utilizador', utilizador);
 
     formLogin.reset();
     mostrarApp();
 });
 
+
+/***** Terminar sessão *****/
+
 btnSair.addEventListener('click', function () {
     localStorage.removeItem('utilizador');
+
+    despesas = [];
+    chaveDespesas = null;
+    chaveTema = null;
+    editarId = null;
+
+    formDespesa.reset();
+    btnGuardar.textContent = 'Adicionar';
+
+    lista.innerHTML = '';
+    spanTotal.textContent = '0.00';
+    legendaGrafico.innerHTML = '';
+    totalGrafico.textContent = '0.00 €';
+
+    if (meuGrafico !== null) {
+        meuGrafico.destroy();
+        meuGrafico = null;
+    }
 
     secApp.classList.add('escondido');
     secLogin.classList.remove('escondido');
 });
+
+
+/***** Mostra app *****/
 
 function mostrarApp() {
     const nome = localStorage.getItem('utilizador');
@@ -103,6 +143,19 @@ function mostrarApp() {
         secLogin.classList.remove('escondido');
         secApp.classList.add('escondido');
         return;
+    }
+
+    chaveDespesas = 'despesas_' + normalizarNome(nome);
+
+    chaveTema = 'tema_' + normalizarNome(nome);
+
+    aplicarTema();
+
+    try {
+        despesas = JSON.parse(localStorage.getItem(chaveDespesas)) || [];
+    } catch (erro) {
+        console.log('Dados inválidos no localStorage:', erro);
+        despesas = [];
     }
 
     titOla.textContent = 'Olá ' + nome + '!';
@@ -117,7 +170,8 @@ function mostrarApp() {
 /***** Tema - localStorage *****/
 
 function aplicarTema() {
-    const noturno = localStorage.getItem('tema') === 'noturno';
+    const noturno = chaveTema !== null &&
+        localStorage.getItem(chaveTema) === 'noturno';
 
     document.body.classList.toggle('noturno', noturno);
 
@@ -129,7 +183,9 @@ function aplicarTema() {
 btnTema.addEventListener('click', function () {
     const noturno = document.body.classList.contains('noturno');
 
-    localStorage.setItem('tema', noturno ? 'claro' : 'noturno');
+    if (chaveTema !== null) {
+        localStorage.setItem(chaveTema, noturno ? 'claro' : 'noturno');
+    }
 
     aplicarTema();
 });
@@ -180,7 +236,9 @@ carregarTempo();
 /***** Despesas *****/
 
 function guardarDespesas() {
-    localStorage.setItem('despesas', JSON.stringify(despesas));
+    if (chaveDespesas !== null) {
+        localStorage.setItem(chaveDespesas, JSON.stringify(despesas));
+    }
 }
 
 formDespesa.addEventListener('submit', function (event) {
@@ -243,7 +301,6 @@ function apagar(id) {
         return d.id !== id;
     });
 
-    // Se estava a editar esta despesa, cancela a edição
     if (editarId === id) {
         editarId = null;
         btnGuardar.textContent = 'Adicionar';
@@ -332,7 +389,6 @@ selectFiltro.addEventListener('change', mostrarDespesas);
 
 function mostrarGrafico() {
 
-    // Total de cada categ.
     const valores = categorias.map(function (categoria) {
         return somar(despesas.filter(function (d) {
             return d.categoria === categoria;
@@ -370,13 +426,13 @@ function mostrarGrafico() {
     totalGrafico.textContent = somar(despesas).toFixed(2) + ' €';
 
 
-    // Destroi gráfico anterior antes de criar outro
+    // Destrói gráfico anterior antes de criar outro
     if (meuGrafico !== null) {
         meuGrafico.destroy();
     }
 
 
-    // Criar novo gráfico
+    // Cria novo gráfico
     meuGrafico = new Chart(grafico, {
         type: 'doughnut',
 
@@ -453,5 +509,4 @@ btnExportar.addEventListener('click', exportarCSV);
 
 /***** Arranque *****/
 
-aplicarTema();
 mostrarApp();
