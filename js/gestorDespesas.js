@@ -28,7 +28,7 @@ const cores = [
     '#A8D58B',
     '#83A9D9'
 ];
-git add .
+
 
 const secLogin = document.getElementById('login');
 const secApp = document.getElementById('app');
